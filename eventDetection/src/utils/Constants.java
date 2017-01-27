@@ -13,6 +13,5 @@ public class Constants {
     public static String outputFolder = "/snap/";
     public static String strabonHost = "semagrow_bde";
     public static int strabonPort = 8080;
-
     
 }
