@@ -44,10 +44,10 @@ public class EventProcessServiceTest {
 		// @QueryParam("reference_date") RestTimestampParam referenceDate)
 		// throws MalformedURLException {
 		// System.out.println(extent);
-		String extent = null;
+//		String extent = null;
 		String keys = "Camp";
-		String eventDate = null;
-		String referenceDate = null;
+//		String eventDate = null;
+//		String referenceDate = null;
 		ResponseMessage respMessage = new ResponseMessage();
 		// if (extent == null && keys == null && eventDate == null &&
 		// referenceDate == null) {

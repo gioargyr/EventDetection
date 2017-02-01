@@ -1,8 +1,6 @@
  package web.config;
 
 import java.net.HttpURLConnection;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -13,6 +11,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 public class RestTimestampParam {
+	
     private DateTime date;
  
     public RestTimestampParam( String dateTimeStr ) throws WebApplicationException {

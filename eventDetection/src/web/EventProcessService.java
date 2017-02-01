@@ -11,13 +11,10 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
@@ -31,7 +28,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
@@ -43,8 +39,6 @@ import modules.storage.StrabonEndpoint;
 import utils.Constants;
 import web.config.ResponseMessage;
 import web.config.RestTimestampParam;
-//import workflows.EventProcessingWorkflow;
-//import workflows.StorageWorkflow;
 
 @Path("/event")
 public class EventProcessService {
@@ -123,11 +117,11 @@ public class EventProcessService {
 		System.out.println("event_date = " + eventDate.toString());
 		//System.out.println("reference_date = " + reference_date);
 		ResponseMessage respMessage = new ResponseMessage();
-		if (extent == null && keys == null && eventDate == null && referenceDate == null) {
-			respMessage.setMessage("At least one of the parameters should not be empty.");
-			throw new WebApplicationException(
-					Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
-		}
+//		if (extent == null && keys == null && eventDate == null && referenceDate == null) {
+//			respMessage.setMessage("At least one of the parameters should not be empty.");
+//			throw new WebApplicationException(
+//					Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
+//		}
 		String keywords = null;
 		if (keys != null) {
 			keywords = keys.replace(",", "|");

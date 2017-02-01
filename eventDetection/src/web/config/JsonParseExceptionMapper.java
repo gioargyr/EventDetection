@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 
 @Provider
 public class JsonParseExceptionMapper implements ExceptionMapper<JsonParseException> {
+	
 	@Override
 	public Response toResponse(JsonParseException exception) {
 		System.out.println("parse");
@@ -18,14 +19,14 @@ public class JsonParseExceptionMapper implements ExceptionMapper<JsonParseExcept
 		exception.printStackTrace();;
 		try {
 			System.out.println(exception.getProcessor().getCurrentName());
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		respMessage.setMessage("This is an invalid json, line "+exception.getLocation().getLineNr()+" ,column "+exception.getLocation().getColumnNr());
 		respMessage.setCode(400);
-		return Response.status(Response.Status.BAD_REQUEST).entity(respMessage).type(MediaType.APPLICATION_JSON)
-				.build();
+		return Response.status(Response.Status.BAD_REQUEST).entity(respMessage).type(MediaType.APPLICATION_JSON).build();
 	}
 
 }
