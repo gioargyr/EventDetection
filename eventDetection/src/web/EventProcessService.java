@@ -41,92 +41,80 @@ import model.Event;
 import modules.storage.RdfStorage;
 import modules.storage.StrabonEndpoint;
 import utils.Constants;
-import utils.IdRetrieval;
-import utils.Views;
 import web.config.ResponseMessage;
 import web.config.RestTimestampParam;
-import workflows.EventProcessingWorkflow;
-import workflows.StorageWorkflow;
+//import workflows.EventProcessingWorkflow;
+//import workflows.StorageWorkflow;
 
 @Path("/event")
 public class EventProcessService {
 
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response eventDetected(Event event) {
-		ResponseMessage respMessage = new ResponseMessage();
-		StorageWorkflow storageWorkflow = new StorageWorkflow();
-		try {
-			// storageWorkflow.storeEvent(event);
-		} catch (Exception e) {
-			respMessage.setMessage("internal server error");
-			respMessage.setCode(500);
-			throw new WebApplicationException(
-					Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).entity(respMessage).build());
-		}
-		ResponseMessage r = new ResponseMessage(200, "event stored successfully");
-		return Response.status(200).entity(r).build();
-	}
+//	@POST
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public Response eventDetected(Event event) {
+//		ResponseMessage respMessage = new ResponseMessage();
+//		ResponseMessage r = new ResponseMessage(200, "event stored successfully");
+//		return Response.status(200).entity(r).build();
+//	}
 
-	@POST
-	@Path("/process")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void saveEvent(@Suspended final AsyncResponse asyncResponse, Event event) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				ResponseMessage respMessage = new ResponseMessage();
-				if (event == null) {
-					respMessage.setMessage("request body should not be empty.");
-					respMessage.setCode(400);
-					throw new WebApplicationException(
-							Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
-				}
-				if (event.getId() == null || event.getId().trim().isEmpty()) {
-					respMessage.setMessage("event id should not be null or empty.");
-					respMessage.setCode(400);
-					throw new WebApplicationException(
-							Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
-				}
-				for (Area area : event.getAreas()) {
-					if (area == null) {
-						respMessage.setMessage("all areas should have a name and a geometry");
-						respMessage.setCode(400);
-						throw new WebApplicationException(
-								Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
-					}
-					if ((area.getName().trim().isEmpty()) || (area.getName() == null) || area.getGeometry() == null) {
-						respMessage.setMessage("all areas should have a name and a geometry");
-						respMessage.setCode(400);
-						throw new WebApplicationException(
-								Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
-					}
-				}
-				EventProcessingWorkflow eventProcessingWorkflow = new EventProcessingWorkflow();
-				try {
-					for (Area a : event.getAreas()) {
-						a.setId(IdRetrieval.getId(false));
-					}
-					boolean result = eventProcessingWorkflow.runWorkflow(event);
-					respMessage.setMessage("event processed successfully");
-					respMessage.setCode(200);
-				} catch (Exception e) {
-					e.printStackTrace();
-					respMessage.setMessage("internal server error");
-					respMessage.setCode(500);
-				}
-				asyncResponse.resume(Response.status(respMessage.getCode()).entity(respMessage).build());
-			}
-		}).start();
-	}
+//	@POST
+//	@Path("/process")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public void saveEvent(@Suspended final AsyncResponse asyncResponse, Event event) {
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				ResponseMessage respMessage = new ResponseMessage();
+//				if (event == null) {
+//					respMessage.setMessage("request body should not be empty.");
+//					respMessage.setCode(400);
+//					throw new WebApplicationException(
+//							Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
+//				}
+//				if (event.getId() == null || event.getId().trim().isEmpty()) {
+//					respMessage.setMessage("event id should not be null or empty.");
+//					respMessage.setCode(400);
+//					throw new WebApplicationException(
+//							Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
+//				}
+//				for (Area area : event.getAreas()) {
+//					if (area == null) {
+//						respMessage.setMessage("all areas should have a name and a geometry");
+//						respMessage.setCode(400);
+//						throw new WebApplicationException(
+//								Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
+//					}
+//					if ((area.getName().trim().isEmpty()) || (area.getName() == null) || area.getGeometry() == null) {
+//						respMessage.setMessage("all areas should have a name and a geometry");
+//						respMessage.setCode(400);
+//						throw new WebApplicationException(
+//								Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(respMessage).build());
+//					}
+//				}
+//				EventProcessingWorkflow eventProcessingWorkflow = new EventProcessingWorkflow();
+//				try {
+//					for (Area a : event.getAreas()) {
+//						a.setId(IdRetrieval.getId(false));
+//					}
+//					boolean result = eventProcessingWorkflow.runWorkflow(event);
+//					respMessage.setMessage("event processed successfully");
+//					respMessage.setCode(200);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					respMessage.setMessage("internal server error");
+//					respMessage.setCode(500);
+//				}
+//				asyncResponse.resume(Response.status(respMessage.getCode()).entity(respMessage).build());
+//			}
+//		}).start();
+//	}
 
 	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@JsonView(Views.Public.class)
 	public Response searchEvents(@QueryParam("extent") String extent, @QueryParam("keys") String keys,
 			@QueryParam("event_date") RestTimestampParam eventDate,
 			@QueryParam("reference_date") RestTimestampParam referenceDate) throws MalformedURLException {
@@ -147,7 +135,7 @@ public class EventProcessService {
 //		RdfStorage st = new StrabonEndpoint(Constants.strabonHost, "endpoint", "3ndpo1nt", Constants.strabonPort, "SemaGrow/sparql");
 		RdfStorage st = null;
 		try {
-			st = new StrabonEndpoint(Constants.strabonHost, "endpoint", "3ndpo1nt", Constants.strabonPort, "SemaGrow/sparql");
+			st = new StrabonEndpoint("luna.di.uoa.gr","endpoint", "3ndpo1nt", 8080, "mapRegistry/Query");
 		} catch (MalformedURLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

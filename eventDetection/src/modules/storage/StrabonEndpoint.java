@@ -48,7 +48,8 @@ public class StrabonEndpoint implements RdfStorage {
 		//return response.getResponse();
 				
 		// create a post method to execute
-		HttpPost method = new HttpPost("http://" + Constants.strabonHost + ":" + Constants.strabonPort + "/" + "SemaGrow/sparql");
+//		HttpPost method = new HttpPost("http://" + Constants.strabonHost + ":" + Constants.strabonPort + "/" + "SemaGrow/sparql");
+		HttpPost method = new HttpPost("http://luna.di.uoa.gr:8080/mapRegistry/Query");
 		System.out.println(Constants.strabonHost + ":" + Constants.strabonPort + "/" + "SemaGrow/sparql");
 		// set the query parameter
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
